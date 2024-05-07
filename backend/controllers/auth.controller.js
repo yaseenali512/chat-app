@@ -12,8 +12,13 @@ export const login = async (req, res) => {
       user?.password || ""
     );
 
+    // it will not return the error , but it will return the message which will not work in the frontend
+    // if (!user || !isPasswordCorrect) {
+    //   return res.status(400).json({ message: "Invalid credentials" });
+    // }
+
     if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ error: "Invalid username or password" });
     }
 
     generateTokenAndSetCookie(user._id, res);
@@ -32,6 +37,8 @@ export const login = async (req, res) => {
 
 export const signup = async (req, res) => {
   try {
+    console.log(req.body);
+
     const { fullName, username, password, confirmPassword, gender } = req.body;
 
     if (password !== confirmPassword)
